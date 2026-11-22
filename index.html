@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LM Pixel Labs | Tecnologia e desenvolvimento de jogos</title>
+<meta name="description" content="LM Pixel Labs: laboratório de tecnologia que cria jogos, aplicativos e experimentos digitais.">
+<meta name="theme-color" content="#05030d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2305030d'/%3E%3Crect x='6' y='6' width='9' height='9' fill='%23a855f7'/%3E%3Crect x='17' y='17' width='9' height='9' fill='%2300d4ff'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#05030d;--card:#0d0920;--line:#2b2054;--p:#a855f7;--pd:#4c1d95;--b:#00d4ff;--t:#ece8ff;--m:#a39cc4;--h:64px}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;scroll-padding-top:var(--h)}
+body{background:var(--bg);color:var(--t);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--b);outline-offset:3px}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:-1}
+.wrap{width:min(1100px,90%);margin:0 auto}
+.grad{background:linear-gradient(90deg,var(--p),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+header{position:fixed;inset:0 0 auto;height:var(--h);z-index:50;transition:background .3s}
+header.sc,header.open{background:rgba(5,3,13,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{width:min(1100px,90%);height:100%;margin:auto;display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:800;font-size:1.2rem}
+.logo span{color:var(--b)}
+#menu{display:flex;gap:28px}
+#menu a{color:var(--m);padding:6px 0;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+#menu a:hover,#menu a[aria-current]{color:var(--t);border-color:var(--b)}
+.burger{display:none;background:none;border:0;width:44px;height:44px;cursor:pointer;flex-direction:column;justify-content:center;align-items:center;gap:5px}
+.burger i{width:24px;height:2px;background:var(--t);transition:.3s}
+.open .burger i:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.open .burger i:nth-child(2){opacity:0}
+.open .burger i:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+.hero{min-height:100vh;min-height:100svh;display:flex;align-items:center;position:relative;padding:var(--h) 0 40px;overflow:hidden}
+.hero:before,.hero:after{content:"";position:absolute;width:420px;height:420px;border-radius:50%;filter:blur(110px);opacity:.28;z-index:-1;animation:fl 9s ease-in-out infinite}
+.hero:before{background:var(--p);top:8%;left:-8%}
+.hero:after{background:var(--b);bottom:0;right:-6%;animation-delay:-4s}
+@keyframes fl{50%{transform:translate(40px,-30px) scale(1.15)}}
+h1{font-size:clamp(2.1rem,7.5vw,4.6rem);line-height:1.1;font-weight:800;letter-spacing:-1.5px}
+.cur{color:var(--b);animation:bl 1s steps(1) infinite}
+@keyframes bl{50%{opacity:0}}
+.lead{max-width:540px;color:var(--m);font-size:1.1rem;margin:22px 0 32px}
+.cta{display:flex;flex-wrap:wrap;gap:16px}
+.scroll{position:absolute;bottom:22px;left:50%;width:24px;height:40px;margin-left:-12px;border:2px solid var(--m);border-radius:14px}
+.scroll:after{content:"";position:absolute;left:50%;top:7px;width:4px;height:8px;margin-left:-2px;background:var(--b);animation:sc 1.6s infinite}
+@keyframes sc{to{transform:translateY(14px);opacity:0}}
+
+.btn{display:inline-block;padding:13px 26px;border:2px solid var(--p);border-radius:2px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--p),#6d28d9);box-shadow:4px 4px 0 var(--pd);transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--b)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--b)}
+.btn.ghost{background:transparent;border-color:var(--b);box-shadow:4px 4px 0 rgba(0,212,255,.25)}
+.btn.ghost:hover{background:rgba(0,212,255,.08);box-shadow:6px 6px 0 var(--p)}
+
+section{padding:90px 0}
+.hero{padding:var(--h) 0 40px}
+h2{font-size:clamp(1.8rem,5vw,2.6rem);line-height:1.2;margin-bottom:14px}
+h2:before{content:"";display:inline-block;width:.4em;height:.4em;margin-right:.85em;background:var(--b);box-shadow:.4em .4em 0 var(--p)}
+.sub{color:var(--m);margin-bottom:28px}
+.two{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:start;margin-top:26px}
+.two>p{color:var(--m);font-size:1.08rem;max-width:60ch}
+.goals{display:grid;gap:14px}
+.goals li{padding:18px 20px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--p);border-radius:3px;color:var(--m)}
+.goals b{display:block;color:var(--t)}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
+.reveal.in{opacity:1;transform:none}
+
+.filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
+.chip{padding:8px 18px;border:1px solid var(--line);border-radius:3px;background:none;color:var(--m);cursor:pointer;transition:.2s}
+.chip:hover{border-color:var(--p);color:var(--t)}
+.chip.on{background:var(--p);border-color:var(--p);color:#fff;box-shadow:3px 3px 0 var(--pd)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:22px}
+.card{position:relative;display:block;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:3px;padding:0 0 22px;overflow:hidden;cursor:pointer;transition:transform .25s,box-shadow .25s,border-color .25s;animation:pop .5s both}
+.card:before{content:"";position:absolute;inset:0;background:radial-gradient(240px circle at var(--x,50%) var(--y,0),rgba(168,85,247,.25),transparent 65%);opacity:0;transition:opacity .3s;pointer-events:none}
+.card:hover{transform:translate(-3px,-3px);border-color:var(--p);box-shadow:5px 5px 0 var(--p)}
+.card:hover:before{opacity:1}
+.thumb{height:130px;display:grid;place-items:center;font-size:3rem;background:linear-gradient(135deg,#2a0f5c,#062b4a)}
+.card h3,.card p,.card em{display:block;margin:12px 20px 0}
+.card em{font-style:normal;font-size:.85rem;color:var(--b)}
+.card p{color:var(--m);font-size:.95rem}
+@keyframes pop{from{opacity:0;transform:scale(.94)}}
+
+.tech{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.tech>div{padding:18px 20px;background:var(--card);border:1px solid var(--line);border-radius:3px}
+.bar{height:8px;margin-top:10px;background:#1b1438;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--p),var(--b));box-shadow:0 0 10px var(--b);transition:width 1.4s .3s cubic-bezier(.2,.8,.2,1)}
+.in .bar i{width:var(--w)}
+
+form{display:grid;gap:16px}
+label{display:grid;gap:6px;color:var(--m);font-size:.92rem}
+input,textarea{width:100%;padding:13px 14px;background:var(--card);border:1px solid var(--line);border-radius:3px;resize:vertical;transition:.2s}
+input:focus,textarea:focus{outline:0;border-color:var(--b);box-shadow:0 0 0 3px rgba(0,212,255,.2)}
+form .btn{justify-self:start}
+.info{display:grid;gap:16px;justify-items:start;color:var(--m)}
+.soc{display:flex;flex-wrap:wrap;gap:10px}
+.soc a{padding:9px 16px;border:1px solid var(--line);border-radius:3px;transition:.2s}
+.soc a:hover{border-color:var(--b);color:var(--b);transform:translate(-2px,-2px);box-shadow:3px 3px 0 var(--b)}
+
+footer{padding:28px 5%;text-align:center;color:var(--m);border-top:1px solid var(--line);font-size:.9rem}
+footer a{color:var(--b);margin-left:10px}
+
+.modal{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(3,1,10,.82);backdrop-filter:blur(6px);animation:fi .25s}
+.box{position:relative;width:min(480px,100%);max-height:90vh;overflow:auto;padding:30px;background:var(--card);border:2px solid var(--p);border-radius:3px;box-shadow:8px 8px 0 var(--pd);animation:pop .3s}
+.big{font-size:3rem;line-height:1.2}
+.box h3{margin:8px 0}
+.box p{color:var(--m);margin-bottom:14px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.tags span{font-size:.8rem;padding:4px 12px;border:1px solid var(--b);color:var(--b)}
+.x{position:absolute;top:8px;right:8px;width:44px;height:44px;background:none;border:0;font-size:2rem;line-height:1;color:var(--m);cursor:pointer}
+.x:hover{color:var(--b)}
+@keyframes fi{from{opacity:0}}
+.toast{position:fixed;left:50%;bottom:24px;z-index:120;max-width:90%;padding:12px 22px;background:#1a1240;border:1px solid var(--b);border-radius:3px;opacity:0;transform:translate(-50%,30px);pointer-events:none;transition:.3s}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+@media(max-width:800px){
+  .burger{display:flex}
+  #menu{position:fixed;top:var(--h);left:0;right:0;flex-direction:column;gap:0;padding:8px 5%;background:rgba(5,3,13,.97);border-bottom:1px solid var(--line);transform:translateY(-130%);visibility:hidden;transition:transform .35s,visibility .35s}
+  .open #menu{transform:none;visibility:visible}
+  #menu a{display:block;padding:14px 0}
+  .two{grid-template-columns:1fr;gap:28px}
+  section{padding:70px 0}
+}
+@media(prefers-reduced-motion:reduce){
+  *,:before,:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal{opacity:1;transform:none}
+  .bar i{width:var(--w)}
+}
+</style>
+<noscript><style>.reveal{opacity:1;transform:none}.bar i{width:var(--w)}</style></noscript>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+
+<header>
+  <nav class="nav" aria-label="Principal">
+    <a href="#inicio" class="logo">LM <span>Pixel</span> Labs</a>
+    <button class="burger" id="burger" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu"><i></i><i></i><i></i></button>
+    <ul id="menu">
+      <li><a href="#inicio">Início</a></li>
+      <li><a href="#sobre">Sobre nós</a></li>
+      <li><a href="#projetos">Projetos</a></li>
+      <li><a href="#tecnologias">Tecnologias</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <section id="inicio" class="hero">
+    <div class="wrap">
+      <h1>Criamos <span class="grad" id="typed">jogos</span><span class="cur" aria-hidden="true">|</span><br>que ganham vida.</h1>
+      <p class="lead">A LM Pixel Labs une tecnologia, design e criatividade para desenvolver jogos, aplicativos e experimentos digitais.</p>
+      <div class="cta">
+        <a class="btn" href="#projetos">Ver projetos</a>
+        <a class="btn ghost" href="#contato">Fale conosco</a>
+      </div>
+    </div>
+    <a href="#sobre" class="scroll" aria-label="Rolar até Sobre nós"></a>
+  </section>
+
+  <section id="sobre">
+    <div class="wrap">
+      <h2>Sobre nós</h2>
+      <div class="two">
+        <p class="reveal">A LM Pixel Labs é um laboratório de tecnologia dedicado a criar jogos, aplicativos e experimentos. Misturamos programação, arte e ideias novas para transformar projetos em experiências que as pessoas querem jogar e usar.</p>
+        <ul class="goals">
+          <li class="reveal"><b>Missão</b>Criar produtos digitais divertidos, rápidos e bem acabados.</li>
+          <li class="reveal"><b>Visão</b>Ser referência em jogos e tecnologia independentes.</li>
+          <li class="reveal"><b>Valores</b>Criatividade, qualidade e melhoria contínua.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="projetos">
+    <div class="wrap">
+      <h2>Projetos</h2>
+      <p class="sub">Toque em um projeto para ver os detalhes.</p>
+      <div class="filters" role="group" aria-label="Filtrar projetos">
+        <button class="chip on" type="button" data-f="todos" aria-pressed="true">Todos</button>
+        <button class="chip" type="button" data-f="jogos" aria-pressed="false">Jogos</button>
+        <button class="chip" type="button" data-f="apps" aria-pressed="false">Aplicativos</button>
+        <button class="chip" type="button" data-f="experimentos" aria-pressed="false">Experimentos</button>
+      </div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <section id="tecnologias">
+    <div class="wrap">
+      <h2>Tecnologias</h2>
+      <p class="sub">As ferramentas que usamos para dar vida às ideias.</p>
+      <div class="tech">
+        <div class="reveal"><p>HTML5 e CSS3</p><div class="bar"><i style="--w:95%"></i></div></div>
+        <div class="reveal"><p>JavaScript</p><div class="bar"><i style="--w:90%"></i></div></div>
+        <div class="reveal"><p>Python</p><div class="bar"><i style="--w:85%"></i></div></div>
+        <div class="reveal"><p>Canvas e gráficos 2D/3D</p><div class="bar"><i style="--w:78%"></i></div></div>
+        <div class="reveal"><p>Game design</p><div class="bar"><i style="--w:88%"></i></div></div>
+        <div class="reveal"><p>Git e GitHub</p><div class="bar"><i style="--w:80%"></i></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contato">
+    <div class="wrap">
+      <h2>Contato</h2>
+      <div class="two">
+        <form id="form" class="reveal">
+          <label>Nome<input name="n" required maxlength="60" autocomplete="name"></label>
+          <label>E-mail<input name="e" type="email" required autocomplete="email"></label>
+          <label>Mensagem<textarea name="m" id="msg" rows="5" required maxlength="800"></textarea></label>
+          <button class="btn" type="submit">Enviar mensagem</button>
+        </form>
+        <div class="info reveal">
+          <p>Prefere escrever direto? Copie nosso e-mail:</p>
+          <button class="btn ghost" id="copy" type="button"></button>
+          <p>Nas redes sociais:</p>
+          <div class="soc" id="soc"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>© <span id="y">2026</span> LM Pixel Labs. Todos os direitos reservados. <a href="#inicio">Voltar ao topo</a></p>
+</footer>
+
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="mt">
+  <div class="box">
+    <button class="x" id="mx" type="button" aria-label="Fechar">&times;</button>
+    <div class="big" id="me" aria-hidden="true"></div>
+    <h3 id="mt"></h3>
+    <p id="md"></p>
+    <div class="tags" id="mg"></div>
+    <button class="btn" id="ml" type="button">Falar sobre este projeto</button>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(() => {
+'use strict';
+
+/* ===== CONFIGURAÇÕES: edite aqui seus dados ===== */
+const CFG = {
+  email: 'contato@lmpixellabs.com',
+  social: [
+    ['GitHub', 'https://github.com/'],
+    ['Instagram', 'https://www.instagram.com/'],
+    ['YouTube', 'https://www.youtube.com/'],
+    ['Discord', 'https://discord.com/']
+  ]
+};
+/* c = categoria (jogos | apps | experimentos) */
+const PROJ = [
+  {t:'Grau de Bike', c:'jogos', e:'🚲', d:'Jogo 3D de empinar a bike na favela.', x:'Mapa de favela em 3D e física realista para o grau de bike.', g:['3D','Física']},
+  {t:'Battle Royale de Robôs', c:'jogos', e:'🤖', d:'Robôs lutam até sobrar só um.', x:'Várias armas, tempestade que fecha o mapa e construção para se defender, tudo rodando no navegador.', g:['HTML5','Canvas']},
+  {t:'Vila Sobrevivente', c:'jogos', e:'🏘️', d:'Sobrevivência 2D em pixel art.', x:'Construa e proteja sua vila em um mundo sandbox cheio de vida, com visual pixel art.', g:['Pixel art','2D']},
+  {t:'SURVIVAL OS', c:'apps', e:'⛺', d:'Guia de sobrevivência que funciona offline.', x:'Aplicativo Android pensado para funcionar sem internet, em aparelhos antigos e modernos.', g:['Android','Offline']},
+  {t:'BitLifes', c:'experimentos', e:'🧬', d:'Simulador de vida artificial.', x:'Criaturas digitais que nascem, evoluem e competem por sobrevivência a cada geração.', g:['Python','Simulação']},
+  {t:'JARVIS 9.0', c:'experimentos', e:'🧠', d:'Organismo digital que evolui sozinho.', x:'Experimento de organismo digital evolutivo, com servidor Flask e IA integrada.', g:['Python','Flask']}
+];
+const WORDS = ['jogos', 'aplicativos', 'experimentos', 'mundos'];
+const CAT = {jogos:'Jogo', apps:'Aplicativo', experimentos:'Experimento'};
+
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const rm = matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+/* ===== Aviso rápido (toast) ===== */
+let tt;
+const toast = m => {
+  const t = $('#toast');
+  t.textContent = m;
+  t.classList.add('on');
+  clearTimeout(tt);
+  tt = setTimeout(() => t.classList.remove('on'), 2800);
+};
+
+/* ===== Menu e cabeçalho ===== */
+const hd = $('header'), bg = $('#burger');
+const setMenu = o => {
+  hd.classList.toggle('open', o);
+  bg.setAttribute('aria-expanded', String(o));
+  bg.setAttribute('aria-label', o ? 'Fechar menu' : 'Abrir menu');
+};
+bg.onclick = () => setMenu(!hd.classList.contains('open'));
+$$('#menu a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+const onScroll = () => hd.classList.toggle('sc', scrollY > 20);
+addEventListener('scroll', onScroll, {passive: true});
+onScroll();
+
+/* Destaca o link da seção visível */
+const links = $$('#menu a');
+const spy = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) links.forEach(a => a.toggleAttribute('aria-current', a.hash === '#' + e.target.id));
+}), {rootMargin: '-45% 0px -50% 0px'});
+$$('main section').forEach(s => spy.observe(s));
+
+/* ===== Animação de entrada ao rolar ===== */
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+}), {threshold: .15});
+$$('.reveal').forEach(el => io.observe(el));
+
+/* ===== Texto digitado no título ===== */
+const ty = $('#typed');
+if (!rm) {
+  let wi = 0, ci = WORDS[0].length, del = true;
+  (function tick() {
+    const w = WORDS[wi];
+    ci += del ? -1 : 1;
+    ty.textContent = w.slice(0, ci);
+    let d = del ? 45 : 95;
+    if (!del && ci === w.length) { del = true; d = 1800; }
+    else if (del && ci === 0) { del = false; wi = (wi + 1) % WORDS.length; d = 350; }
+    setTimeout(tick, d);
+  })();
+}
+
+/* ===== Projetos: cartões, filtro e janela de detalhes ===== */
+const grid = $('#grid');
+grid.innerHTML = PROJ.map((p, i) =>
+  `<button class="card" type="button" data-i="${i}" data-c="${p.c}" style="animation-delay:${i * 60}ms">` +
+  `<div class="thumb" aria-hidden="true">${p.e}</div><em>${CAT[p.c]}</em><h3>${p.t}</h3><p>${p.d}</p></button>`
+).join('');
+
+grid.addEventListener('pointermove', e => {
+  const c = e.target.closest('.card');
+  if (!c) return;
+  const r = c.getBoundingClientRect();
+  c.style.setProperty('--x', e.clientX - r.left + 'px');
+  c.style.setProperty('--y', e.clientY - r.top + 'px');
+});
+
+$$('.chip').forEach(b => b.addEventListener('click', () => {
+  $$('.chip').forEach(x => {
+    x.classList.toggle('on', x === b);
+    x.setAttribute('aria-pressed', String(x === b));
+  });
+  $$('.card').forEach(c => {
+    const show = b.dataset.f === 'todos' || c.dataset.c === b.dataset.f;
+    c.hidden = !show;
+    if (show) { c.style.animation = 'none'; void c.offsetWidth; c.style.animation = ''; }
+  });
+}));
+
+const md = $('#modal');
+let cur = PROJ[0], last = null;
+const closeModal = () => {
+  md.hidden = true;
+  document.body.style.overflow = '';
+  if (last) last.focus();
+};
+grid.addEventListener('click', e => {
+  const c = e.target.closest('.card');
+  if (!c) return;
+  cur = PROJ[c.dataset.i];
+  last = c;
+  $('#me').textContent = cur.e;
+  $('#mt').textContent = cur.t;
+  $('#md').textContent = cur.x;
+  $('#mg').innerHTML = [CAT[cur.c], ...cur.g].map(g => `<span>${g}</span>`).join('');
+  md.hidden = false;
+  document.body.style.overflow = 'hidden';
+  $('#mx').focus();
+});
+$('#mx').onclick = closeModal;
+md.addEventListener('click', e => { if (e.target === md) closeModal(); });
+md.addEventListener('keydown', e => {
+  if (e.key !== 'Tab') return;
+  const first = $('#mx'), end = $('#ml');
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); end.focus(); }
+  else if (!e.shiftKey && document.activeElement === end) { e.preventDefault(); first.focus(); }
+});
+addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (!md.hidden) closeModal(); else setMenu(false);
+});
+$('#ml').onclick = () => {
+  const nome = cur.t;
+  closeModal();
+  $('#msg').value = 'Olá! Quero saber mais sobre o projeto ' + nome + '.';
+  location.hash = '#contato';
+  setTimeout(() => $('#msg').focus({preventScroll: true}), 600);
+};
+
+/* ===== Contato ===== */
+$('#soc').innerHTML = CFG.social.map(([n, u]) =>
+  `<a href="${u}" target="_blank" rel="noopener noreferrer">${n}</a>`).join('');
+const cp = $('#copy');
+cp.textContent = CFG.email;
+cp.onclick = async () => {
+  try {
+    await navigator.clipboard.writeText(CFG.email);
+    toast('E-mail copiado!');
+  } catch {
+    location.href = 'mailto:' + CFG.email;
+  }
+};
+$('#form').addEventListener('submit', e => {
+  e.preventDefault();
+  const f = e.target, n = f.n.value.trim(), m = f.m.value.trim();
+  const sub = encodeURIComponent('Contato pelo site - ' + n);
+  const body = encodeURIComponent(m + '\n\n' + n + ' (' + f.e.value.trim() + ')');
+  location.href = 'mailto:' + CFG.email + '?subject=' + sub + '&body=' + body;
+  toast('Abrindo seu aplicativo de e-mail…');
+  f.reset();
+});
+$('#y').textContent = new Date().getFullYear();
+
+/* ===== Fundo animado de pixels conectados ===== */
+const cv = $('#bg'), cx = cv.getContext('2d');
+let cw = 0, ch = 0, pts = [], raf = 0, lw = 0;
+const init = () => {
+  cw = cv.width = innerWidth;
+  ch = cv.height = innerHeight;
+  const n = Math.min(80, Math.round(cw * ch / 20000));
+  pts = Array.from({length: n}, (_, i) => ({
+    x: Math.random() * cw, y: Math.random() * ch,
+    vx: (Math.random() - .5) * .4, vy: (Math.random() - .5) * .4,
+    c: i % 2 ? '168,85,247' : '0,212,255'
+  }));
+};
+const draw = () => {
+  cx.clearRect(0, 0, cw, ch);
+  for (let i = 0; i < pts.length; i++) {
+    const a = pts[i];
+    a.x += a.vx; a.y += a.vy;
+    if (a.x < 0 || a.x > cw) a.vx *= -1;
+    if (a.y < 0 || a.y > ch) a.vy *= -1;
+    cx.fillStyle = 'rgba(' + a.c + ',.9)';
+    cx.fillRect(a.x, a.y, 3, 3);
+    for (let j = i + 1; j < pts.length; j++) {
+      const b = pts[j], d = Math.hypot(a.x - b.x, a.y - b.y);
+      if (d < 120) {
+        cx.strokeStyle = 'rgba(' + a.c + ',' + (.28 * (1 - d / 120)) + ')';
+        cx.beginPath(); cx.moveTo(a.x, a.y); cx.lineTo(b.x, b.y); cx.stroke();
+      }
+    }
+  }
+};
+const loop = () => { draw(); raf = requestAnimationFrame(loop); };
+lw = innerWidth;
+init();
+addEventListener('resize', () => {
+  if (innerWidth === lw) return;
+  lw = innerWidth;
+  init();
+  if (rm) draw();
+});
+if (rm) draw();
+else {
+  loop();
+  document.addEventListener('visibilitychange', () => {
+    cancelAnimationFrame(raf);
+    if (!document.hidden) loop();
+  });
+}
+})();
+</script>
+</body>
+</html>
